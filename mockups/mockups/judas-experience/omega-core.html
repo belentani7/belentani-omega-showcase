@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BELENTANI // JUDAS EXPERIENCE — OMEGA CORE</title>
+<style>
+:root{
+  --bg-void:#050505; --bg-void-alt:#0A0A0A;
+  --red-blood:#FF003C; --red-magma:#FF2A1A; --red-ruby:#FF0055;
+  --gold-sacred:#FFD700; --cyan-aether:#00FFFF; --purple-void:#B026FF;
+  --green-matrix:#00FF41; --white-ghost:#F5F5F5;
+  --line:rgba(255,255,255,.08);
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --disp:"Orbitron","Chakra Petch",sans-serif;
+  --fan:"Cinzel Decorative","Playfair Display",serif;
+  --body:"Chakra Petch","Segoe UI",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg-void);color:var(--white-ghost);
+  font-family:var(--body);overflow-x:hidden;
+  cursor:crosshair;
+}
+::selection{background:var(--red-blood);color:#fff}
+a{color:inherit;text-decoration:none}
+canvas#starfield{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+
+/* CRT scanlines + grain */
+body::before{
+  content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);
+  mix-blend-mode:overlay;opacity:.5;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.05;
+  background-image:radial-gradient(#fff 1px,transparent 1px);background-size:220px 220px;
+}
+
+/* ─────────────── BOOT ─────────────── */
+#boot{
+  position:fixed;inset:0;z-index:10000;background:var(--bg-void);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  transition:opacity .8s ease;font-family:var(--mono);
+}
+#boot.done{opacity:0;pointer-events:none}
+#bootLog{width:min(640px,90vw);font-size:13px;line-height:1.9;color:var(--green-matrix);white-space:pre-wrap}
+#bootBar{width:min(640px,90vw);height:3px;background:var(--line);margin-top:24px;overflow:hidden}
+#bootBar i{display:block;height:100%;width:0%;background:var(--green-matrix);transition:width .3s}
+
+/* HUD */
+#hud{
+  position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(5,5,5,.72);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+#hud .brand{font-family:var(--disp);font-weight:900;letter-spacing:.18em;font-size:14px;color:var(--red-blood);text-shadow:0 0 18px rgba(255,0,60,.55)}
+#hud .brand em{font-style:normal;color:var(--gold-sacred)}
+#hud nav{display:flex;gap:22px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+#hud nav a{color:rgba(245,245,245,.6);transition:color .2s}
+#hud nav a:hover{color:var(--red-blood)}
+#hud .status{font-family:var(--mono);font-size:10px;color:var(--cyan-aether)}
+#hud .status b{color:var(--green-matrix)}
+
+main{position:relative;z-index:1}
+
+/* section scaffolding */
+section{position:relative;padding:110px 6vw;border-bottom:1px solid var(--line)}
+.s-title{
+  font-family:var(--disp);font-weight:900;letter-spacing:.24em;text-transform:uppercase;
+  font-size:clamp(22px,3.4vw,44px);color:var(--white-ghost);margin-bottom:10px;
+}
+.s-title::before{content:"// ";color:var(--red-blood)}
+.s-sub{font-family:var(--mono);font-size:12px;color:rgba(245,245,245,.45);letter-spacing:.06em;margin-bottom:52px}
+
+/* HERO */
+#hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
+#hero .pre{font-family:var(--mono);font-size:clamp(10px,1.4vw,14px);letter-spacing:.5em;color:var(--cyan-aether);margin-bottom:18px;text-transform:uppercase}
+#hero h1{
+  font-family:var(--disp);font-weight:900;font-size:clamp(52px,13vw,168px);line-height:.95;
+  letter-spacing:.06em;color:var(--white-ghost);position:relative;
+  text-shadow:0 0 42px rgba(255,0,60,.35);
+}
+#hero h1 .blood{color:var(--red-blood);animation:flick 3.2s infinite}
+@keyframes flick{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.4}94%{opacity:1}96%{opacity:.6}97%{opacity:1}}
+#hero .tag{font-family:var(--fan);font-style:italic;font-size:clamp(15px,2vw,22px);color:var(--gold-sacred);margin:26px 0 44px;text-shadow:0 0 24px rgba(255,215,0,.25)}
+#hero .cta{
+  font-family:var(--disp);letter-spacing:.28em;font-size:13px;text-transform:uppercase;color:var(--red-blood);
+  border:1px solid var(--red-blood);padding:16px 42px;clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
+  transition:all .25s;background:transparent;
+}
+#hero .cta:hover{background:var(--red-blood);color:#fff;box-shadow:0 0 44px rgba(255,0,60,.5)}
+#hero .scroll{position:absolute;bottom:26px;font-family:var(--mono);font-size:10px;letter-spacing:.4em;color:rgba(245,245,245,.35);animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+/* ARTIST */
+#artist .grid{display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:60px;align-items:start}
+#artist .portrait{
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:linear-gradient(160deg,var(--red-blood),#3d0011);
+  display:flex;align-items:flex-end;justify-content:center;min-height:480px;overflow:hidden;position:relative;
+}
+#artist .portrait .ph{
+  font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.85);letter-spacing:.2em;
+  padding:26px;text-align:center;width:100%;background:rgba(0,0,0,.35);text-transform:uppercase;
+}
+#artist h3{font-family:var(--disp);font-size:26px;letter-spacing:.1em;color:var(--red-blood);margin-bottom:6px}
+#artist .role{font-family:var(--mono);font-size:11px;color:var(--gold-sacred);letter-spacing:.18em;margin-bottom:22px}
+#artist p{color:rgba(245,245,245,.72);font-size:14.5px;line-height:1.85;margin-bottom:16px}
+#artist p b{color:var(--white-ghost)}
+#artist blockquote{
+  border-left:2px solid var(--red-blood);padding:14px 22px;margin:26px 0;font-family:var(--fan);font-style:italic;
+  font-size:17px;color:var(--gold-sacred);background:rgba(255,0,60,.05);
+}
+#artist .data{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+#artist .data span{font-family:var(--mono);font-size:11px;padding:8px 12px;border:1px solid var(--line);color:rgba(245,245,245,.7)}
+
+/* 5 ELEMENTS */
+#elements .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:20px}
+.gem{position:relative;padding:34px 18px 26px;text-align:center;border:1px solid var(--line);transition:border-color .25s,transform .25s;background:rgba(255,255,255,.015)}
+.gem:hover{transform:translateY(-6px)}
+.gem .diamond{
+  width:64px;height:64px;margin:0 auto 18px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb, var(--c) 14%, #000);border:1px solid var(--c);
+  box-shadow:0 0 26px color-mix(in srgb,var(--c) 40%,transparent);animation:pulse 3s infinite;
+}
+.gem .diamond span{transform:rotate(-45deg);font-family:var(--mono);font-size:10px;color:var(--c)}
+@keyframes pulse{0%,100%{transform:rotate(45deg) scale(1)}50%{transform:rotate(45deg) scale(1.08)}}
+.gem h4{font-family:var(--disp);font-size:13px;letter-spacing:.22em;color:var(--c);text-transform:uppercase;margin-bottom:8px}
+.gem p{font-size:12px;line-height:1.7;color:rgba(245,245,245,.6)}
+.gem .sig{font-family:var(--mono);font-size:10px;color:var(--c);margin-top:14px;display:block;letter-spacing:.1em}
+
+/* SONIC ARCHIVE */
+#music .album-art{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:48px;
+}
+.track{
+  border:1px solid var(--line);background:rgba(255,255,255,.015);padding:18px;display:flex;align-items:center;gap:14px;transition:border-color .2s,transform .2s;
+}
+.track:hover{border-color:var(--red-blood);transform:translateX(4px)}
+.track .num{font-family:var(--disp);font-size:20px;color:var(--red-blood);width:34px;text-align:center}
+.track .meta{flex:1}
+.track .meta b{font-size:13px;letter-spacing:.04em;display:block}
+.track .meta small{font-family:var(--mono);font-size:10px;color:rgba(245,245,245,.45)}
+.track .play{font-family:var(--mono);font-size:10px;color:var(--gold-sacred);border:1px solid var(--gold-sacred);padding:6px 12px;cursor:pointer;background:transparent;transition:all .2s}
+.track .play:hover{background:var(--gold-sacred);color:#000}
+#lyricBox{margin-top:40px;border:1px solid var(--line);padding:30px;background:rgba(255,0,60,.03);position:relative}
+#lyricBox::before{content:"JUDAS.WAV // EMOTIONAL PAYLOAD";position:absolute;top:12px;right:16px;font-family:var(--mono);font-size:9px;color:var(--red-blood);letter-spacing:.14em}
+#lyricBox h3{font-family:var(--fan);font-size:20px;color:var(--gold-sacred);margin-bottom:14px}
+#lyricBox p{font-family:var(--mono);font-size:13px;line-height:2;color:rgba(245,245,245,.82);white-space:pre-wrap}
+#lyricBox .lang{font-family:var(--mono);font-size:10px;color:var(--cyan-aether);margin-bottom:14px;letter-spacing:.2em}
+
+/* JUDAS ERA */
+#judas .phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.phase{border:1px solid var(--line);padding:24px;background:linear-gradient(180deg,rgba(255,0,60,.04),transparent 60%);position:relative;transition:border-color .25s}
+.phase:hover{border-color:var(--purple-void)}
+.phase .n{font-family:var(--disp);font-size:12px;color:var(--purple-void);letter-spacing:.3em}
+.phase h4{font-family:var(--disp);font-size:15px;letter-spacing:.12em;margin:10px 0 12px;color:var(--white-ghost)}
+.phase p{font-size:12.5px;line-height:1.8;color:rgba(245,245,245,.62)}
+.phase .key{display:block;margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--gold-sacred)}
+
+/* VIDEO / FORMATS */
+#video .formats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.format{border:1px solid var(--line);padding:28px;transition:border-color .25s}
+.format:hover{border-color:var(--cyan-aether)}
+.format .ratio{
+  aspect-ratio:16/9;background:#000;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;position:relative;overflow:hidden;font-family:var(--mono);font-size:11px;color:rgba(245,245,245,.4);letter-spacing:.2em;
+}
+.format .ratio.vertical{aspect-ratio:9/16;max-height:300px;margin:0 auto 20px}
+.format h3{font-family:var(--disp);font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan-aether);margin-bottom:12px}
+.format ol{padding-left:18px}
+.format li{font-size:12.5px;line-height:1.85;color:rgba(245,245,245,.7);margin-bottom:8px}
+.format b{color:var(--gold-sacred)}
+
+/* TERMINAL */
+#terminal{background:var(--bg-void-alt)}
+#term{
+  max-width:760px;margin:0 auto;border:1px solid var(--line);background:#000;box-shadow:0 0 80px rgba(255,0,60,.08);
+}
+#term .bar{display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:rgba(245,245,245,.5)}
+#term .dot{width:10px;height:10px;border-radius:50%}
+#term .out{padding:22px;font-family:var(--mono);font-size:12.5px;line-height:1.9;min-height:220px;white-space:pre-wrap;color:var(--green-matrix)}
+#term .out .sys{color:var(--cyan-aether)}
+#term .out .gold{color:var(--gold-sacred)}
+#term .out .blood{color:var(--red-blood)}
+#term .line{display:flex;gap:10px;padding:0 22px 20px}
+#term .line .prompt{font-family:var(--mono);font-size:13px;color:var(--red-blood)}
+#term input{
+  flex:1;background:transparent;border:none;outline:none;color:var(--white-ghost);
+  font-family:var(--mono);font-size:13px;
+}
+.cmds{margin-top:34px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.cmds button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:7px 12px;border:1px solid var(--line);color:rgba(245,245,245,.6);background:transparent;cursor:pointer;transition:all .2s}
+.cmds button:hover{color:var(--red-blood);border-color:var(--red-blood)}
+
+footer{border-top:1px solid var(--line);padding:40px 6vw;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:rgba(245,245,245,.35);text-transform:uppercase}
+footer span{color:var(--red-blood)}
+
+@media (max-width:860px){
+  #hud nav{display:none}
+  #artist .grid{grid-template-columns:1fr}
+  #video .formats{grid-template-columns:1fr}
+  .format .ratio.vertical{max-width:260px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  #boot{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- BOOT -->
+<div id="boot">
+  <div id="bootLog"></div>
+  <div id="bootBar"><i></i></div>
+</div>
+
+<canvas id="starfield"></canvas>
+
+<!-- HUD -->
+<header id="hud">
+  <div class="brand">BELENTANI<em>_OS</em></div>
+  <nav>
+    <a href="#artist">Entidad</a>
+    <a href="#elements">Artefacto</a>
+    <a href="#music">Sonic Archive</a>
+    <a href="#judas">Judas Era</a>
+    <a href="#video">Cine</a>
+    <a href="#terminal">Terminal</a>
+  </nav>
+  <div class="status">CORE <b>ONLINE</b> // OMEGA v6.0</div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="pre">JUDAS ERA V.6.0 OMEGA</div>
+  <h1>BELEN<span class="blood">TANI</span></h1>
+  <div class="tag">"La traición no es el final. Es el input."</div>
+  <a class="cta" href="#artist">[ Enter Galactic Core ]</a>
+  <div class="scroll">SCROLL TO DESCEND</div>
+</section>
+
+<!-- ARTIST -->
+<section id="artist">
+  <h2 class="s-title">La Entidad</h2>
+  <div class="s-sub">ARTISTA VERIFICADO // OPERADOR DEL SISTEMA</div>
+  <div class="grid">
+    <div class="portrait"><div class="ph">PORTRAIT<br>PEDRO BELENTANI<br>[clip-path: hexágono canónico]</div></div>
+    <div>
+      <h3>PEDRO MARCOS SANTOS BELENTANI</h3>
+      <div class="role">CANTANTE · COMPOSITOR · ARQUITECTO DE SISTEMAS CREATIVOS · MASTER IA (LABASAD 2025)</div>
+      <p><b>São Paulo, Brasil — 7 abril 1995.</b> Criado en Barcelona. Productor: <b>Hey Duck</b> (Recife). Artista 100% independiente con autonomía total sobre su catálogo.</p>
+      <p>Género: <b>R&B alternativo, dark pop, electrónica experimental</b>. Lanzamientos: "Sleep Talking" (2023), "Judas" (2024-2026), "Mon Amour" (2025), "Heart Breaking", "ANTI-LOVE".</p>
+      <p>La página no documenta al artista: <b>crea un universo alternativo donde el visitante es OPERADOR del sistema.</b></p>
+      <blockquote>"Trata la música como un espacio de vulnerabilidad radical — donde hackear el trauma a través de la creación es el único protocolo que importa."</blockquote>
+      <div class="data">
+        <span>OS: BELENTANI_OMEGA</span><span>ROL: ARTIFACT + HUMAN</span><span>ESTADO: VERIFICADO</span><span>FRECUENCIA: 432Hz</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 ELEMENTS -->
+<section id="elements">
+  <h2 class="s-title">El Artefacto</h2>
+  <div class="s-sub">PROTOCOLO DE 5 ELEMENTOS // PROTECCIÓN DE LA PSIQUE</div>
+  <div class="row">
+    <div class="gem" style="--c:#FFD700"><div class="diamond"><span>PEDRO</span></div><h4>La Roca</h4><p>El ancla fundacional. La gema de oro inmutable que sostiene la estructura.</p><span class="sig">FIRMA 1/5 PEDRO.SIG</span></div>
+    <div class="gem" style="--c:#00FFFF"><div class="diamond"><span>MARCOS</span></div><h4>El Cronista</h4><p>El observador que registra la historia mientras los demás la viven.</p><span class="sig">FIRMA 2/5 MARCOS.SIG</span></div>
+    <div class="gem" style="--c:#B026FF"><div class="diamond"><span>SANTOS</span></div><h4>La Antena</h4><p>La santidad plural que sintoniza el portal con lo trascendente.</p><span class="sig">FIRMA 3/5 SANTOS.SIG</span></div>
+    <div class="gem" style="--c:#FF003C"><div class="diamond"><span>BELENTANI</span></div><h4>El Artefacto</h4><p>Integración del guerrero y el ángel. La belleza anómala.</p><span class="sig">FIRMA 4/5 BELENTANI.SIG</span></div>
+    <div class="gem" style="--c:#F5F5F5"><div class="diamond"><span>HUMAN</span></div><h4>La Interfaz</h4><p>El operador que mantiene integridad en el mundo real.</p><span class="sig">FIRMA 5/5 HUMAN.SIG</span></div>
+  </div>
+</section>
+
+<!-- SONIC ARCHIVE -->
+<section id="music">
+  <h2 class="s-title">Sonic Archive</h2>
+  <div class="s-sub">ALBUM JUDAS — THE DEBT // CORPUS MULTILINGÜE</div>
+  <div class="album-art" id="trackList">
+    <div class="track"><div class="num">01</div><div class="meta"><b>La Llave Dorada</b><small>OVERTURE · SPOKEN WORD · 1:40</small></div><button class="play" onclick="playTrack(0)">▶ RECALL</button></div>
+    <div class="track"><div class="num">02</div><div class="meta"><b>Trueno, Botas y Cadena</b><small>VERSO 1 · INDUSTRIAL · 2:10</small></div><button class="play" onclick="playTrack(1)">▶ RECALL</button></div>
+    <div class="track"><div class="num">03</div><div class="meta"><b>Besé a Judas</b><small>SINGLE MAESTRO · /ai/ ANCLADO · 3:24</small></div><button class="play" onclick="playTrack(2)">▶ RECALL</button></div>
+    <div class="track"><div class="num">04</div><div class="meta"><b>El Evangelio en la Piel</b><small>VERSO 2 · R&B OSCURO · 2:48</small></div><button class="play" onclick="playTrack(3)">▶ RECALL</button></div>
+    <div class="track"><div class="num">05</div><div class="meta"><b>Pedro y la Espada</b><small>PUENTE · ÓRGANO · 2:02</small></div><button class="play" onclick="playTrack(4)">▶ RECALL</button></div>
+    <div class="track"><div class="num">06</div><div class="meta"><b>El Fósforo y la Llama</b><small>OUTRO · SUSURRO · 3:12</small></div><button class="play" onclick="playTrack(5)">▶ RECALL</button></div>
+  </div>
+  <div id="lyricBox">
+    <h3 id="lyricTitle">BESÉ A JUDAS</h3>
+    <div class="lang" id="lyricLang">ES · PT · CA · EN</div>
+    <p id="lyricText"></p>
+  </div>
+</section>
+
+<!-- JUDAS ERA -->
+<section id="judas">
+  <h2 class="s-title">Judas Era</h2>
+  <div class="s-sub">NARRATIVA EN 5 FASES // LA DESPERSONALIZACIÓN TOTAL</div>
+  <div class="phases">
+    <div class="phase"><div class="n">FASE 0</div><h4>EL HOMBRE INTEGRADO</h4><p>Cuatro procesos paralelos: El Ángel, El Guerrero, El Analítico, El Cronista. Un solo pecho. Una Llave Dorada.</p><span class="key">"No existe un cuándo. Existe un entre."</span></div>
+    <div class="phase"><div class="n">FASE I</div><h4>LA DEUDA IMPAGABLE</h4><p>El beso de los pies como espejo. Recibir devoción sin devolverla. La deuda se volvió impagable.</p><span class="key">Deuda psicólogica → algoritmo</span></div>
+    <div class="phase"><div class="n">FASE II</div><h4>EL ROBO Y EL CANTO</h4><p>Judas roba la Llave Dorada. El artefacto se activa y Pedro le canta en vez de maldecir.</p><span class="key">"La llave es metal. Mi voz no."</span></div>
+    <div class="phase"><div class="n">FASE III</div><h4>LA VICTORIA AMARGA</h4><p>Judas vuelve victorioso pero destrozado: nunca olvidó al que le vio y le destinó.</p><span class="key">Victorioso. Y destrozado.</span></div>
+    <div class="phase"><div class="n">FASE IV</div><h4>LA MENTIRA COMPARTIDA</h4><p>La llave nunca fue lo valioso. Fue una mentira compartida para que Judas descubriera lo que importa.</p><span class="key">"Recuperaremos la llave. O cambiaremos la cerradura."</span></div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <h2 class="s-title">Cine Judas</h2>
+  <div class="s-sub">GUION MAESTRO // 2 FORMATOS DE DISTRIBUCIÓN</div>
+  <div class="formats">
+    <div class="format">
+      <div class="ratio">YOUTUBE 16:9 · 5:12 · 4K</div>
+      <h3>El Decreto de las Treinta Monedas</h3>
+      <ol>
+        <li><b>0:00</b> — Plano cenital. Ascensor de cristal desciende a un abismo de hormigón. Luz azul y destellos ámbar.</li>
+        <li><b>1:15</b> — Mesa de piedra pulida. 30 monedas de oro (#FFD700). El beso sella el contrato en espejo.</li>
+        <li><b>3:00</b> — Montaje acelerado: agua sobre piedra, corona rota en aceite negro, el fósforo en la oscuridad.</li>
+        <li><b>5:12</b> — Susurro final: "Pedro es como me llaman... Lo haría todo otra vez."</li>
+      </ol>
+    </div>
+    <div class="format">
+      <div class="ratio vertical">REELS 9:16 · 15–59s · 1080x1920</div>
+      <h3>Hooks para el Filtro de 10 segundos</h3>
+      <ol>
+        <li><b>Reel 1 · El Beso:</b> "Besé a Judas... y lo haría todo otra vez." Entrada directa al coro con anclaje /ai/.</li>
+        <li><b>Reel 2 · La Deuda:</b> "La plata pesaba más que las costillas." Spoken word RVC + subtítulos oro.</li>
+        <li><b>Reel 3 · El Artefacto:</b> Las 5 gemas encendiéndose en rafá. Voz clonada: "FIRMA 4/5 BELENTANI.SIG".</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- TERMINAL -->
+<section id="terminal">
+  <h2 class="s-title">Portal</h2>
+  <div class="s-sub">TERMINAL OPERATIVO // ESCRIBE UN COMANDO</div>
+  <div id="term">
+    <div class="bar"><span class="dot" style="background:#FF003C"></span><span class="dot" style="background:#FFD700"></span><span class="dot" style="background:#00FF41"></span><span style="margin-left:8px">judas_os // portal_v6</span></div>
+    <div class="out" id="termOut"></div>
+    <div class="line"><span class="prompt">BELENTANI&gt;</span><input id="termIn" autocomplete="off" placeholder="escribe 'help'" spellcheck="false"></div>
+  </div>
+  <div class="cmds">
+    <button onclick="cmd('help')">help</button>
+    <button onclick="cmd('status')">status</button>
+    <button onclick="cmd('judas')">judas</button>
+    <button onclick="cmd('lore')">lore</button>
+    <button onclick="cmd('elements')">elements</button>
+    <button onclick="cmd('music')">music</button>
+    <button onclick="cmd('clear')">clear</button>
+  </div>
+</section>
+
+</main>
+
+<footer>BELENTANI_OMEGA // <span>JUDAS EXPERIENCE</span> // SISTEMA OPERATIVO CREATIVO — 2026</footer>
+
+<script>
+// ─── BOOT ───
+const bootLines=[
+  "JUDAS_OS // INITIALIZING OMEGA CORE",
+  "> Cargando módulo de identidad... OK",
+  "> Verificando Llave Dorada... [ARTIFACT.sig:4/5]",
+  "> Sincronizando 5 arquetipos... OK",
+  "> Corriendo subrutina 0xJUDAS... escuchando",
+  "> Frecuencia base: 432Hz... sintonizada",
+  "> La traición no es el final. Es el input.",
+  "> ACCESO CONCEDIDO. BIENVENIDO, OPERADOR.",
+];
+(async()=>{
+  const log=document.getElementById('bootLog'),bar=document.getElementById('bootBar').firstElementChild;
+  for(let i=0;i<bootLines.length;i++){
+    log.textContent+=bootLines[i]+"\n";
+    bar.style.width=((i+1)/bootLines.length*100)+"%";
+    await new Promise(r=>setTimeout(r,320));
+  }
+  document.getElementById('boot').classList.add('done');
+})();
+
+// ─── STARFIELD ───
+const cv=document.getElementById('starfield'),cx=cv.getContext('2d');let stars=[];
+function resize(){cv.width=innerWidth;cv.height=innerHeight;
+  stars=Array.from({length:Math.min(300,innerWidth/4)},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,z:Math.random(),r:Math.random()*1.2+.2}));
+}
+resize();addEventListener('resize',resize);
+(function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  for(const s of stars){
+    s.y+=s.z*.25;if(s.y>cv.height){s.y=0;s.x=Math.random()*cv.width}
+    const a=s.z*.8;
+    cx.fillStyle=`rgba(255,0,60,${a*.5})`;
+    cx.beginPath();cx.arc(s.x,s.y,s.r,0,7);cx.fill();
+  }
+  requestAnimationFrame(tick);
+})();
+
+// ─── LYRICS ───
+const LYRICS=[
+ {t:"LA LLAVE DORADA",l:"OVERTURE · ES",x:"No existe un 'cuándo'. No existe un 'dónde'. Existe un 'entre'.\nCuatro voces. Un solo hombre. Y en su pecho, la Llave Dorada.\nEl Ángel cantó. El Guerrero se irguió. El Analítico observó. El Cronista registró."},
+ {t:"TRUENO, BOTAS Y CADENA",l:"VERSO 1 · ES",x:"Llegó trueno, botas y cadena\nSonrisa dulce, fuego por dentro\nOjos en brasa, voz como el vino\nHice nevar, perdimos el camino\nMordí el anzuelo cuando dijo mi nombre"},
+ {t:"BESÉ A JUDAS",l:"CORO · ES/PT/CA — anclaje /ai/",x:"Besé a Judas, besé a Judas\nCaí tan fuerte, no hay más vuelta\nLabios en llamas, beso que cae\nMe dije: es la última, ay\nAy, ay, Judas, Judas, ay\nTú me quemas, me haces caer\nBesé a Judas, besé a Judas\nY lo haría todo otra vez, ay"},
+ {t:"EL EVANGELIO EN LA PIEL",l:"VERSO 2 · ES",x:"Es pirata, lleno de rezos\nEscribió su evangelio entre besos\nEn mi piel y en mi cama\nVendió mi alma al diablo, sin trama\nCadena de oro, corona rota\nVolteó mi mundo del derecho al revés"},
+ {t:"PEDRO Y LA ESPADA",l:"PUENTE · ES",x:"Dijeron que debía tratarme\nDijeron que debí alejarme\nPero Pedro es como me llaman\nDueño de mi tierra, aquí me quedo\nVi la espada, sentí la vergüenza\nY si preguntan qué lamento: no acabé mi tormento"},
+ {t:"EL FÓSFORO Y LA LLAMA",l:"OUTRO · PT/ES",x:"Risquei o fósforo, tú llevaste la llama\nBesé a Judas, besé a Judas\nLo haría todo otra vez\nPedro es como me llaman...\n// TRANSMISSION END //"}
+];
+function playTrack(i){
+  const L=LYRICS[i];
+  document.getElementById('lyricTitle').textContent=L.t;
+  document.getElementById('lyricLang').textContent=L.l;
+  document.getElementById('lyricText').textContent=L.x;
+  document.getElementById('lyricBox').scrollIntoView({behavior:'smooth',block:'center'});
+}
+playTrack(2);
+
+// ─── TERMINAL ───
+const out=document.getElementById('termOut');
+const HELP={
+ help:"Comandos: status · judas · lore · elements · music · clear",
+ status:"CORE: ONLINE // ARTE DE 5 ELEMENTOS: 4/5 // FRECUENCIA: 432Hz // ENTIDAD: VERIFICADA",
+ judas:"JUDAS ERA // La traición se convierte en ALGORITMO. El abusador se reduce al arquetipo de Judas: un virus trágico y narcisista, destinado a un final simbólico y mediocre.",
+ lore:"FASE IV — LA MENTIRA COMPARTIDA: la llave nunca fue lo valiosa. Fue una mentira para que Judas descubriera lo que importa. // TRANSMISSION END //",
+ elements:"PEDRO·oro // MARCOS·cyan // SANTOS·púrpura // BELENTANI·rojo // HUMAN·blanco — 5 gemas protegen la psique.",
+ music:"SONIC ARCHIVE: 6 movimientos — La Llave Dorada · Trueno Botas y Cadena · Besé a Judas · El Evangelio en la Piel · Pedro y la Espada · El Fósforo y la Llama.",
+ clear:null
+};
+function print(s){out.textContent+=s+"\n";out.scrollTop=out.scrollHeight}
+function cmd(c){
+  if(c==='clear'){out.textContent='';return}
+  print("$ "+c);
+  const r=HELP[c];
+  if(r===undefined) print("comando desconocido. escribe 'help'");
+  else if(r) print(r);
+}
+const inp=document.getElementById('termIn');
+inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inp.value.trim()){cmd(inp.value.trim().toLowerCase());inp.value=''}});
+print("JUDAS_OS // PORTAL V6.0");
+print("Escribe 'help' para ver comandos. El sistema te observa, OPERADOR.");
+</script>
+</body>
+</html>

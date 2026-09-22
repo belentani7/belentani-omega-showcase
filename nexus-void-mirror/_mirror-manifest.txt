@@ -1,0 +1,5 @@
+OK | 3924 | /
+OK | 895556 | /assets/index-WjkkWfRK.js
+OK | 73948 | /assets/index-5ipB8RRJ.css
+OK | 219348 | /static/js/badge.jsOK | 428868 | /media/images/public/6a5d8097f2391507f50d19ee/a7dedfc6e_file_00000000f5ac7243b5335c0840905ebc_2026-07-13_18_10_02728001.webp (patched ref)
+INFO | Servir con: node _serve.js  (http://127.0.0.1:4173)

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BELENTANI OMEGA — Galería de Versiones</title>
+<meta name="description" content="Galería navegable de todas las versiones del proyecto web BELENTANI OMEGA / JUDAS ERA">
+<style>
+  :root{--rojo:#ff073a;--bg:#0a0a0f;--panel:rgba(255,255,255,.04);--border:rgba(255,7,58,.25);--txt:#eaeaf2;--dim:#9a9ab0}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background:
+    radial-gradient(ellipse 60% 40% at 70% -10%,rgba(255,7,58,.18),transparent),
+    radial-gradient(ellipse 40% 30% at 10% 110%,rgba(120,0,255,.12),transparent);pointer-events:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:64px 24px 96px;position:relative}
+  .hud{font-size:11px;letter-spacing:.35em;color:var(--rojo);text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:clamp(34px,6vw,64px);font-weight:800;line-height:1.02;letter-spacing:-.02em}
+  h1 em{color:var(--rojo);font-style:normal}
+  .sub{color:var(--dim);margin-top:16px;font-size:16px;max-width:640px;line-height:1.6}
+  .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:12px;color:var(--dim)}
+  .meta b{color:var(--txt);font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;margin-top:48px}
+  a.card{display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px 22px 18px;text-decoration:none;color:var(--txt);transition:.25s;backdrop-filter:blur(8px)}
+  a.card:hover{border-color:var(--rojo);transform:translateY(-3px);box-shadow:0 14px 40px -12px rgba(255,7,58,.45)}
+  .card h2{font-size:17px;font-weight:700}
+  .card .num{font-size:11px;letter-spacing:.25em;color:var(--rojo)}
+  .card p{font-size:13px;color:var(--dim);line-height:1.55;flex:1}
+  .tags{display:flex;gap:6px;flex-wrap:wrap}
+  .tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);border-radius:999px;padding:3px 10px;color:var(--dim)}
+  .tag.hot{border-color:var(--rojo);color:var(--rojo)}
+  footer{margin-top:64px;font-size:12px;color:var(--dim);border-top:1px solid var(--border);padding-top:22px;line-height:2}
+  footer a{color:var(--rojo);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hud">BELENTANI // JUDAS ERA // archivo 2026-09-22</div>
+  <h1>OMEGA<br><em>Galería de Versiones</em></h1>
+  <p class="sub">Todas las versiones del ecosistema web BELENTANI / JUDAS ERA, recuperadas y publicadas
+  para su revisión. Cada tarjeta abre una versión navegable del proyecto.</p>
+  <div class="meta"><span><b>8</b> versiones</span><span><b>14</b> variantes internas del sitio</span><span>motor <b>Three.js</b> + lore unificado</span></div>
+
+  <div class="grid">
+    <a class="card" href="unificado/">
+      <span class="num">01 — LA MÁS AVANZADA · 20-SEP</span>
+      <h2>THE JUDAS EXPERIENCE // UNIFICADO</h2>
+      <p>Unifica todas las piezas: motor Three.js (planeta procedural, llave dorada PBR, diamante IOR 2.417),
+      bloom cinematográfico, 9 sesiones, Códice de lore. La versión con la que continuar el proyecto.</p>
+      <div class="tags"><span class="tag hot">Three.js</span><span class="tag">3D</span><span class="tag">Lore</span></div>
+    </a>
+
+    <a class="card" href="omega-live/">
+      <span class="num">02 — MAESTRO · 10-SEP</span>
+      <h2>belentani_Omega-live</h2>
+      <p>Stack clásico completo: 18 módulos JS numerados (AI, i18n, portal, terminal, WebGL), css, data,
+      sub-sitios judas/portal/studio y 14 versiones del sitio. Documentación maestra incluida.</p>
+      <div class="tags"><span class="tag">Stack modular</span><span class="tag">i18n PT&gt;ES&gt;EN&gt;CA</span></div>
+    </a>
+
+    <a class="card" href="immersive-portal/">
+      <span class="num">03 — PORTAL · 16-SEP</span>
+      <h2>Omega Immersive Portal</h2>
+      <p>Portal inmersivo 3D con módulos css/js, carpeta magic/ (shaders GLSL, sfx, escena inmersiva)
+      y sistema de validación.</p>
+      <div class="tags"><span class="tag">GLSL</span><span class="tag">Immersive</span></div>
+    </a>
+
+    <a class="card" href="omega-live-baseline/">
+      <span class="num">04 — SITIO · AGO-SEP</span>
+      <h2>belentani-Omega-live (sitio)</h2>
+      <p>Versión de sitio desplegada: portada editorial + subpáginas judas/portal/studio/versions,
+      service worker y manifest PWA.</p>
+      <div class="tags"><span class="tag">PWA</span><span class="tag">Sitio</span></div>
+    </a>
+
+    <a class="card" href="omega-template/">
+      <span class="num">05 — PLANTILLA · 16-SEP</span>
+      <h2>Omega Template</h2>
+      <p>Plantilla de experiencia con tres piezas de 250 KB (archive, portal, studio 3K) listas para reutilizar
+      como base de cualquier sección.</p>
+      <div class="tags"><span class="tag">Template</span><span class="tag">3K</span></div>
+    </a>
+
+    <a class="card" href="nexus-void-mirror/">
+      <span class="num">06 — BUILD · 14-SEP</span>
+      <h2>Omega Nexus Void Mirror</h2>
+      <p>Build Vite/React del espejo del vacío: bundle JS 895 KB, CSS 74 KB, media y badge system.</p>
+      <div class="tags"><span class="tag">React</span><span class="tag">Vite</span></div>
+    </a>
+
+    <a class="card" href="omega-online/">
+      <span class="num">07 — PROTOTIPO · 16-SEP</span>
+      <h2>belentani-omega-online</h2>
+      <p>Prototipo de una sola página (94 KB) autocontenido: la versión más ligera del concepto Omega.</p>
+      <div class="tags"><span class="tag">Single-file</span></div>
+    </a>
+
+    <a class="card" href="mockups/">
+      <span class="num">08 — DISEÑO</span>
+      <h2>Mockups & Biblioteca</h2>
+      <p>Mockups de diseño: judas-experience y biblioteca audiovisual — exploración visual previa.</p>
+      <div class="tags"><span class="tag">Design</span></div>
+    </a>
+  </div>
+
+  <footer>
+    <b>SUB-SITIOS del maestro:</b>
+    <a href="omega-live/judas/">judas</a> · <a href="omega-live/portal/">portal</a> ·
+    <a href="omega-live/studio/">studio</a> · <a href="omega-live/versions/">versions (01→14)</a><br>
+    Archivo completo (privado): <a href="https://github.com/belentani7/belentani-omega-versions-archive">belentani-omega-versions-archive</a> ·
+    Snapshots del chat OMEGA CORE en el Release del archivo.<br>
+    Recopilado el 2026-09-22 · PT &gt; ES &gt; EN &gt; CA
+  </footer>
+</div>
+</body>
+</html>

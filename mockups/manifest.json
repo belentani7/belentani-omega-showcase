@@ -1,0 +1,28 @@
+﻿{
+  "generated": "2026-08-05T01:30:00Z",
+  "sections": [
+    {
+      "id": "mockups",
+      "label": "Mockups & Experiencias",
+      "groups": [
+        {
+          "slug": "judas-experience",
+          "files": [
+            {
+              "label": "BELENTANI_OS — Omega Core (Interactivo)",
+              "path": "mockups/judas-experience/omega-core.html"
+            },
+            {
+              "label": "Judas Experience: The Debt (v1)",
+              "path": "mockups/judas-experience/index.html"
+            },
+            {
+              "label": "Art Studio — Portada + Keyframes (Procedural, exporta PNG)",
+              "path": "mockups/judas-experience/art-studio.html"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

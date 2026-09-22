@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BELENTANI // JUDAS EXPERIENCE — ART STUDIO</title>
+<style>
+:root{
+  --bg-void:#050505; --bg-void-alt:#0A0A0A;
+  --red-blood:#FF003C; --gold-sacred:#FFD700; --cyan-aether:#00FFFF;
+  --purple-void:#B026FF; --white-ghost:#F5F5F5; --green-matrix:#00FF41;
+  --line:rgba(255,255,255,.08);
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --disp:"Orbitron","Chakra Petch",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-void);color:var(--white-ghost);font-family:var(--mono);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);mix-blend-mode:overlay;opacity:.5}
+::selection{background:var(--red-blood);color:#fff}
+
+#hud{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:1px solid var(--line);background:rgba(5,5,5,.72);backdrop-filter:blur(18px)}
+#hud .brand{font-family:var(--disp);font-weight:900;letter-spacing:.18em;font-size:14px;color:var(--red-blood);text-shadow:0 0 18px rgba(255,0,60,.55)}
+#hud .brand em{font-style:normal;color:var(--gold-sacred)}
+#hud .status{font-size:10px;color:var(--cyan-aether)}
+#hud .status b{color:var(--green-matrix)}
+
+main{position:relative;z-index:1;padding:96px 6vw 60px}
+header.head{margin-bottom:44px}
+header.head h1{font-family:var(--disp);font-weight:900;letter-spacing:.24em;text-transform:uppercase;font-size:clamp(22px,3.4vw,44px)}
+header.head h1::before{content:"// ";color:var(--red-blood)}
+header.head p{font-size:12px;color:rgba(245,245,245,.45);letter-spacing:.06em;margin-top:10px;line-height:1.8}
+
+.panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:34px}
+.card{border:1px solid var(--line);background:rgba(255,255,255,.015);padding:20px;transition:border-color .25s}
+.card:hover{border-color:var(--red-blood)}
+.card .tag{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:10px;letter-spacing:.2em;color:var(--gold-sacred)}
+.card canvas{display:block;width:100%;background:#000;border:1px solid var(--line)}
+.card .meta{font-size:10px;color:rgba(245,245,245,.45);margin-top:10px;letter-spacing:.08em}
+.card button{display:block;width:100%;margin-top:14px;padding:12px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--red-blood);color:var(--red-blood);background:transparent;cursor:pointer;transition:all .25s}
+.card button:hover{background:var(--red-blood);color:#fff;box-shadow:0 0 34px rgba(255,0,60,.5)}
+
+.note{margin-top:44px;border:1px solid var(--line);padding:20px;font-size:11px;line-height:1.9;color:rgba(245,245,245,.6)}
+.note b{color:var(--gold-sacred)}
+.note .k{color:var(--red-blood)}
+footer{border-top:1px solid var(--line);padding:30px 6vw;text-align:center;font-size:10px;letter-spacing:.2em;color:rgba(245,245,245,.35);text-transform:uppercase}
+footer span{color:var(--red-blood)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header id="hud">
+  <div class="brand">BELENTANI<em>_ART</em></div>
+  <div class="status">RENDER ENGINE <b>LOCAL</b> // PALETA CANÓNICA</div>
+</header>
+
+<main>
+  <header class="head">
+    <h1>Art Studio</h1>
+    <p>ALBUM "JUDAS — THE DEBT" // GENERADOR PROCEDURAL DE ARTE. Los tres activos se renderizan en tu navegador y se exportan en alta resolución sin depender de servicios externos. #050505 void · #FF003C blood · #FFD700 gold · #00FFFF aether · #B026FF portal.</p>
+  </header>
+
+  <div class="panel">
+    <div class="card">
+      <div class="tag"><span>PORTADA DEL ÁLBUM</span><span>2048×2048</span></div>
+      <canvas id="cv-cover" width="1024" height="1024"></canvas>
+      <div class="meta">SQ · SPOTIFY / APPLE / BANDCAMP // FIGURA DE OBSIDIANA, GEOMETRÍA SAGRADA ROTA, GRIETAS DE SANGRE</div>
+      <button onclick="exportPng('cover','album-cover-judas-experience.png')">[ Exportar PNG 2048 ]</button>
+    </div>
+
+    <div class="card">
+      <div class="tag"><span>KEYFRAME VIDEOCLIP</span><span>3840×2160</span></div>
+      <canvas id="cv-16" width="1024" height="576"></canvas>
+      <div class="meta">16:9 · YOUTUBE 4K // CATEDRAL NEGRA, HAZ DE ORO, GRIETAS ROJAS, FIGURA ENCAPUCHADA</div>
+      <button onclick="exportPng('frame16','videoclip-frame-16x9.png')">[ Exportar PNG 4K ]</button>
+    </div>
+
+    <div class="card">
+      <div class="tag"><span>KEYFRAME REELS</span><span>1080×1920</span></div>
+      <canvas id="cv-9" width="576" height="1024"></canvas>
+      <div class="meta">9:16 · INSTAGRAM / TIKTOK // MONEDA QUE SANGRA, HUMO PÚRPURA, BOKEH CIAN</div>
+      <button onclick="exportPng('reel','reel-frame-9x16.png')">[ Exportar PNG 1080×1920 ]</button>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>NOTA DE PIPELINE.</b> Estos renders son los <b>placeholder canónicos</b> del universo JUDAS — la llave de color y composición del videoclip. Cuando tengas una clave OpenAI válida (la actual devuelve <span class="k">401 Unauthorized</span>), se regenerarán como cinematografía fotorrealista con el mismo prompt directoral. Ambos renderizan los mismos keyframes: 01 ascensor cenital · 02 la mesa de las 30 monedas · 03 montaje de agua/corona/fósforo · 04 el beso.
+  </div>
+</main>
+
+<footer>BELENTANI_ART // <span>JUDAS EXPERIENCE</span> // RENDER ENGINE LOCAL — 2026</footer>
+
+<script>
+const C={
+  void:'#050505', voidAlt:'#0A0A0A', blood:'#FF003C', gold:'#FFD700',
+  cyan:'#00FFFF', purple:'#B026FF', white:'#F5F5F5'
+};
+
+function grain(g,n,s){
+  for(let i=0;i<n;i++){
+    g.fillStyle=`rgba(${255|0},${255|0},${255|0},${Math.random()*.06})`;
+    g.fillRect(Math.random()*s[0],Math.random()*s[1],1,1);
+  }
+}
+function vignette(g,w,h,a){a=a??.55;const r=g.createRadialGradient(w/2,h/2,Math.min(w,h)*.32,w/2,h/2,Math.max(w,h)*.72);r.addColorStop(0,'rgba(0,0,0,0)');r.addColorStop(1,`rgba(0,0,0,${a})`);g.fillStyle=r;g.fillRect(0,0,w,h)}
+
+/* ── NEBULAS / ATMÓSFERA ── */
+function nebula(g,cx,cy,rad,color,alpha){
+  const r=g.createRadialGradient(cx,cy,0,cx,cy,rad);
+  r.addColorStop(0,color.replace(')','')? color : color);
+  const a=hexToRgba(color,alpha);
+  const rr=g.createRadialGradient(cx,cy,0,cx,cy,rad);
+  rr.addColorStop(0,a);rr.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=rr;g.fillRect(cx-rad,cy-rad,rad*2,rad*2);
+}
+function hexToRgba(hex,alpha){
+  const n=parseInt(hex.slice(1),16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${alpha})`;
+}
+function nebulaColor(color,alpha){return hexToRgba(color,alpha)}
+
+/* ── FIGURA ENCAPUCHADA (sombra) ── */
+function hooded(g,cx,baseY,scale){
+  g.save();
+  g.translate(cx,baseY);
+  g.scale(scale,scale);
+  g.fillStyle='rgba(0,0,0,.92)';
+  g.beginPath();
+  g.moveTo(-46,0);
+  g.quadraticCurveTo(-52,-70,-22,-120);
+  g.quadraticCurveTo(-8,-148,0,-152);
+  g.quadraticCurveTo(8,-148,22,-120);
+  g.quadraticCurveTo(52,-70,46,0);
+  g.quadraticCurveTo(0,26,-46,0);
+  g.fill();
+  g.beginPath();
+  g.ellipse(0,-120,15,30,0,0,Math.PI*2);
+  g.fill();
+  g.restore();
+}
+
+/* ── PORTADA 1:1 ── */
+function drawCover(){
+  const cv=document.getElementById('cv-cover'),g=cv.getContext('2d'),w=cv.width,h=cv.height;
+  g.fillStyle=C.void;g.fillRect(0,0,w,h);
+  nebula(g,w*.5,h*.12,w*.42,C.purple,.22);
+  nebula(g,w*.12,h*.85,w*.35,C.blood,.16);
+  nebula(g,w*.88,h*.8,w*.28,C.cyan,.08);
+
+  /* geometría sagrada rota */
+  g.strokeStyle=hexToRgba(C.gold,.8);g.lineWidth=2;
+  g.beginPath();g.arc(w*.5,h*.38,w*.27,0,Math.PI*2);g.stroke();
+  g.beginPath();g.moveTo(w*.5,h*.38);g.lineTo(w*.5+w*.27,h*.38);g.lineTo(w*.5+w*.135,h*.38-Math.sin(Math.PI/3)*w*.27);g.closePath();g.stroke();
+  g.strokeStyle=hexToRgba(C.blood,.65);g.lineWidth=1.5;
+  g.beginPath();g.arc(w*.5,h*.38,w*.31,Math.PI*.25,Math.PI*1.1);g.stroke();
+
+  /* figura central */
+  hooded(g,w*.5,h*.56,w*0.42);
+
+  /* grietas de sangre */
+  g.strokeStyle=hexToRgba(C.blood,.8);g.lineWidth=2;
+  g.lineCap='round';
+  g.beginPath();g.moveTo(w*.5,h*.72);
+  g.lineTo(w*.42,h*.86);g.lineTo(w*.46,h*.94);
+  g.moveTo(w*.5,h*.72);g.lineTo(w*.58,h*.84);g.lineTo(w*.54,h*.95);
+  g.moveTo(w*.5,h*.72);g.lineTo(w*.5,h*.96);
+  g.stroke();
+
+  /* polvo dorado */
+  for(let i=0;i<160;i++){
+    const x=Math.random()*w,y=Math.random()*h,r=Math.random()*1.6+.4;
+    g.fillStyle=hexToRgba(C.gold,Math.random()*.5+.15);
+    g.beginPath();g.arc(x,y,r,0,7);g.fill();
+  }
+
+  /* moneda */
+  g.fillStyle=hexToRgba(C.gold,.9);
+  g.beginPath();g.arc(w*.5,h*.72,13,0,7);g.fill();
+  g.fillStyle=C.void;
+  g.beginPath();g.arc(w*.5,h*.72,6,0,7);g.fill();
+  g.fillStyle=hexToRgba(C.gold,.9);
+  g.font='bold 8px monospace';g.textAlign='center';g.textBaseline='middle';
+  g.fillText('30',w*.5,h*.72);
+
+  vignette(g,w,h,.5);grain(g,1200,[w,h]);
+}
+
+/* ── KEYFRAME 16:9 ── */
+function drawFrame16(){
+  const cv=document.getElementById('cv-16'),g=cv.getContext('2d'),w=cv.width,h=cv.height;
+  g.fillStyle=C.void;g.fillRect(0,0,w,h);
+
+  /* columnas de catedral */
+  const colW=w*.045,cols=[w*.06,w*.24,w*.74,w*.9];
+  for(const x of cols){
+    g.fillStyle='rgba(255,255,255,.02)';
+    g.fillRect(x,0,colW,h);
+    g.fillStyle='rgba(255,255,255,.06)';
+    g.fillRect(x,0,2,h);
+  }
+
+  /* haz de luz dorado */
+  const ray=g.createLinearGradient(w*.5,0,w*.5,h*.9);
+  ray.addColorStop(0,hexToRgba(C.gold,.30));
+  ray.addColorStop(.7,hexToRgba(C.gold,.05));
+  ray.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=ray;
+  g.beginPath();g.moveTo(w*.44,0);g.lineTo(w*.56,0);g.lineTo(w*.74,h);g.lineTo(w*.26,h);g.closePath();g.fill();
+
+  /* suelo agrietado (perspectiva) */
+  g.strokeStyle=hexToRgba(C.white,.1);g.lineWidth=1;
+  for(let i=0;i<9;i++){
+    const t=i/9;
+    g.beginPath();g.moveTo(w/2,h*.7);g.lineTo(w*t,h);g.stroke();
+  }
+  g.strokeStyle=hexToRgba(C.blood,.75);g.lineWidth=2;
+  g.beginPath();
+  g.moveTo(w*.5,h*.78);g.lineTo(w*.4,h*.9);g.lineTo(w*.44,h*.98);
+  g.moveTo(w*.5,h*.78);g.lineTo(w*.6,h*.92);g.lineTo(w*.56,h);
+  g.stroke();
+
+  /* figura */
+  hooded(g,w*.5,h*.72,w*.52);
+
+  /* halo tras la figura */
+  const halo=g.createRadialGradient(w*.5,h*.6,10,w*.5,h*.6,w*.22);
+  halo.addColorStop(0,hexToRgba(C.gold,.28));halo.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=halo;g.beginPath();g.arc(w*.5,h*.6,w*.22,0,7);g.fill();
+
+  nebula(g,w*.2,h*.2,w*.3,C.purple,.12);
+  nebula(g,w*.85,h*.7,w*.28,C.cyan,.07);
+
+  /* barras letterbox */
+  g.fillStyle='#000';g.fillRect(0,0,w,h*.06);g.fillRect(0,h-h*.06,w,h*.06);
+
+  vignette(g,w,h,.45);grain(g,900,[w,h]);
+}
+
+/* ── KEYFRAME 9:16 ── */
+function drawReel(){
+  const cv=document.getElementById('cv-9'),g=cv.getContext('2d'),w=cv.width,h=cv.height;
+  g.fillStyle=C.void;g.fillRect(0,0,w,h);
+  nebula(g,w*.5,h*.3,w*.5,C.purple,.26);
+  nebula(g,w*.2,h*.75,w*.4,C.blood,.12);
+  nebula(g,w*.8,h*.5,w*.3,C.cyan,.07);
+
+  /* bokeh cian */
+  for(let i=0;i<14;i++){
+    const x=Math.random()*w,y=Math.random()*h,r=Math.random()*26+6;
+    g.strokeStyle=hexToRgba(C.cyan,Math.random()*.25+.05);
+    g.lineWidth=1.5;
+    g.beginPath();g.arc(x,y,r,0,7);g.stroke();
+  }
+
+  /* humo púrpura desde abajo */
+  const smoke=g.createLinearGradient(0,h,0,h*.6);
+  smoke.addColorStop(0,hexToRgba(C.purple,.22));smoke.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=smoke;g.fillRect(0,h*.55,w,h*.45);
+
+  /* moneda central */
+  const cx=w*.5,cy=h*.42,rad=w*.16;
+  const coin=g.createRadialGradient(cx-rad*.4,cy-rad*.4,rad*.1,cx,cy,rad);
+  coin.addColorStop(0,'#FFE97A');coin.addColorStop(.55,C.gold);coin.addColorStop(1,'#8a6d00');
+  g.fillStyle=coin;
+  g.beginPath();g.arc(cx,cy,rad,0,7);g.fill();
+  g.strokeStyle='rgba(0,0,0,.5)';g.lineWidth=2;g.stroke();
+  g.fillStyle='rgba(20,10,0,.85)';
+  g.beginPath();g.arc(cx,cy,rad*.5,0,7);g.fill();
+  g.fillStyle=C.gold;
+  g.font=`bold ${rad*.42}px monospace`;g.textAlign='center';g.textBaseline='middle';
+  g.fillText('30',cx,cy+rad*.04);
+
+  /* sangre cayendo */
+  g.lineCap='round';
+  for(let i=0;i<7;i++){
+    const dx=(i-3)*w*.035 + (Math.random()*10-5);
+    const len=Math.random()*.18+0.1;
+    g.strokeStyle=hexToRgba(C.blood,Math.random()*.6+.3);
+    g.lineWidth=Math.random()*6+3;
+    g.beginPath();g.moveTo(cx+dx,cy+rad*.78);
+    const tip=cy+rad*.78+len*h*.85;
+    g.quadraticCurveTo(cx+dx+(Math.random()*16-8),tip-h*.08,cx+dx+(Math.random()*12-6),tip);
+    g.stroke();
+    /* gota */
+    g.fillStyle=hexToRgba(C.blood,.85);
+    g.beginPath();g.arc(cx+dx+(Math.random()*10-5),tip+8,3,0,7);g.fill();
+  }
+
+  vignette(g,w,h,.5);grain(g,1000,[w,h]);
+}
+
+function exportPng(key,name){
+  const scale={cover:2,frame16:3.75,reel:1.875}[key];
+  const src={cover:document.getElementById('cv-cover'),frame16:document.getElementById('cv-16'),reel:document.getElementById('cv-9')}[key];
+  const out=document.createElement('canvas');
+  out.width=Math.round(src.width*scale);out.height=Math.round(src.height*scale);
+  const og=out.getContext('2d');
+  og.imageSmoothingQuality='high';
+  og.drawImage(src,0,0,out.width,out.height);
+  const a=document.createElement('a');
+  a.download=name;a.href=out.toDataURL('image/png');a.click();
+}
+
+drawCover();drawFrame16();drawReel();
+</script>
+</body>
+</html>
